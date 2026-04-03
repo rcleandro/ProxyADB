@@ -1,0 +1,32 @@
+# strings_es.properties
+app_title=ADB Proxy
+app_subtitle=control de proxy v\u00eda ADB
+window_title=ADB Proxy
+
+label_detected_ip=IP detectada
+label_port=Puerto
+label_adb_path=ADB en PATH
+
+adb_status_checking=verificando\u2026
+adb_status_available=disponible
+adb_status_unavailable=no encontrado
+
+ip_not_detected=no detectada
+
+toggle_loading=esperando\u2026
+toggle_active=PROXY ACTIVO
+toggle_inactive=PROXY INACTIVO
+
+cmd_preview_label_enable=pr\u00f3ximo comando \u00b7 activar
+cmd_preview_label_disable=pr\u00f3ximo comando \u00b7 desactivar
+
+msg_proxy_enabled=Proxy activado correctamente
+msg_proxy_disabled=Proxy desactivado correctamente
+msg_adb_not_found=ADB no encontrado en el PATH
+msg_ip_not_detected=IP local no detectada
+
+err_adb_not_found=ADB no encontrado. Verifique el PATH.
+err_device_not_connected=Ning\u00fan dispositivo conectado v\u00eda ADB.
+err_command_error=Error en comando ADB (exit %d): %s
+err_unexpected=Error inesperado: %s
+err_ip_missing=IP local no detectada

@@ -1,0 +1,32 @@
+# strings_en.properties
+app_title=ADB Proxy
+app_subtitle=proxy control via ADB
+window_title=ADB Proxy
+
+label_detected_ip=Detected IP
+label_port=Port
+label_adb_path=ADB in PATH
+
+adb_status_checking=checking\u2026
+adb_status_available=available
+adb_status_unavailable=not found
+
+ip_not_detected=not detected
+
+toggle_loading=waiting\u2026
+toggle_active=PROXY ON
+toggle_inactive=PROXY OFF
+
+cmd_preview_label_enable=next command \u00b7 enable
+cmd_preview_label_disable=next command \u00b7 disable
+
+msg_proxy_enabled=Proxy enabled successfully
+msg_proxy_disabled=Proxy disabled successfully
+msg_adb_not_found=ADB not found in PATH
+msg_ip_not_detected=Local IP not detected
+
+err_adb_not_found=ADB not found. Check your PATH.
+err_device_not_connected=No device connected via ADB.
+err_command_error=ADB command error (exit %d): %s
+err_unexpected=Unexpected error: %s
+err_ip_missing=Local IP not detected
