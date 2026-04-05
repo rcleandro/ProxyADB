@@ -53,4 +53,4 @@ Os arquivos gerados estarão disponíveis em `composeApp/build/compose/binaries`
 
 ---
 
-Desenvolvido com ❤️ por Leandro Carvalho.
+Desenvolvido por Leandro Carvalho.
