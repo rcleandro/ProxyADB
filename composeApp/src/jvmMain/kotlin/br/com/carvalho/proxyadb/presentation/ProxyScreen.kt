@@ -1,8 +1,14 @@
 package br.com.carvalho.proxyadb.presentation
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -102,6 +108,7 @@ private fun InfoCard(state: ProxyUiState, onPortChange: (String) -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .animateContentSize()
             .clip(RoundedCornerShape(AppConstants.SIZE_CORNER_RADIUS_MEDIUM.dp))
             .background(AppColors.surface)
             .border(
@@ -293,20 +300,27 @@ private fun CommandPreview(state: ProxyUiState) {
 
 @Composable
 private fun StatusMessage(message: UserMessage?) {
-    val (text, color) = when (message) {
-        is UserMessage.Success -> message.text to AppColors.success
-        is UserMessage.Error -> message.text to AppColors.error
-        null -> return
-    }
-    Box(
-        modifier = Modifier.fillMaxWidth(),
-        contentAlignment = Alignment.Center
+    AnimatedVisibility(
+        visible = message != null,
+        enter = fadeIn() + expandVertically(),
+        exit = fadeOut() + shrinkVertically()
     ) {
-        Text(
-            text = text,
-            fontSize = AppConstants.FONT_SIZE_MEDIUM.sp,
-            color = color,
-            fontFamily = FontFamily.Monospace
-        )
+        message?.let { msg ->
+            val (text, color) = when (msg) {
+                is UserMessage.Success -> msg.text to AppColors.success
+                is UserMessage.Error -> msg.text to AppColors.error
+            }
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = text,
+                    fontSize = AppConstants.FONT_SIZE_MEDIUM.sp,
+                    color = color,
+                    fontFamily = FontFamily.Monospace
+                )
+            }
+        }
     }
 }
