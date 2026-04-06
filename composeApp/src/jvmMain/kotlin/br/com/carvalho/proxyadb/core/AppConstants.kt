@@ -34,6 +34,11 @@ object AppConstants {
     const val EXCLUDE_VBOX = "vbox"
     const val EXCLUDE_VIRTUAL = "virtual"
     const val EXCLUDE_LOOPBACK = "loopback"
+    const val SYS_PROP_OS_NAME = "os.name"
+    const val OS_NAME_MAC = "mac"
+    const val MAC_PROP_FULL_WINDOW_CONTENT = "apple.awt.fullWindowContent"
+    const val MAC_PROP_TRANSPARENT_TITLE_BAR = "apple.awt.transparentTitleBar"
+    const val MAC_PROP_WINDOW_TITLE_VISIBLE = "apple.awt.windowTitleVisible"
     const val PADDING_MEDIUM_V = 12
     const val PADDING_LARGE = 14
     const val PADDING_XXLARGE = 20
@@ -49,11 +54,13 @@ object AppConstants {
     const val SIZE_TOGGLE_THUMB_OFFSET_END = 34
     const val SIZE_DIVIDER_HEIGHT = 0.5
     const val SIZE_PORT_WIDTH = 56
+    const val SIZE_IP_INPUT_WIDTH = 150
     const val SIZE_BORDER_THICKNESS = 1.0
     const val SIZE_BORDER_THICK_THICKNESS = 2.0
     const val SIZE_CORNER_RADIUS_SMALL = 12
     const val SIZE_CORNER_RADIUS_MEDIUM = 16
     const val SIZE_CORNER_RADIUS_LARGE = 20
+    const val SIZE_MAC_TOP_PADDING = 24
     const val FONT_SIZE_XSMALL = 9
     const val FONT_SIZE_SMALL = 11
     const val FONT_SIZE_MEDIUM = 12

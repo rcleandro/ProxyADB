@@ -73,6 +73,9 @@ private fun ProxyScreenContent(
     onPortChange: (String) -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
+    val os = remember { System.getProperty("os.name").lowercase() }
+    val topPadding = if (os.contains("mac")) AppConstants.SIZE_MAC_TOP_PADDING.dp else AppConstants.SPACING_ZERO.dp
+
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -84,7 +87,12 @@ private fun ProxyScreenContent(
             ),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(AppConstants.SPACING_LARGE.dp),
-        contentPadding = PaddingValues(AppConstants.PADDING_SCREEN.dp),
+        contentPadding = PaddingValues(
+            start = AppConstants.PADDING_SCREEN.dp,
+            end = AppConstants.PADDING_SCREEN.dp,
+            bottom = AppConstants.PADDING_SCREEN.dp,
+            top = AppConstants.PADDING_SCREEN.dp + topPadding
+        ),
     ) {
         item { AppTitle() }
         item { InfoCard(state = state, onIpChange = onIpChange, onPortChange = onPortChange) }
@@ -146,7 +154,7 @@ private fun InfoCard(
                     color = if (state.localIp.isNotBlank()) AppColors.mono else AppColors.error,
                     textAlign = androidx.compose.ui.text.style.TextAlign.End
                 ),
-                modifier = Modifier.width(150.dp),
+                modifier = Modifier.width(AppConstants.SIZE_IP_INPUT_WIDTH.dp),
             )
         }
         HorizontalDivider()
