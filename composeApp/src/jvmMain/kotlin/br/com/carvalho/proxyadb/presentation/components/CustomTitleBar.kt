@@ -31,13 +31,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.FrameWindowScope
 import br.com.carvalho.proxyadb.core.AppConstants
 import br.com.carvalho.proxyadb.core.StringKeys
 import br.com.carvalho.proxyadb.core.Strings
 import br.com.carvalho.proxyadb.presentation.AppColors
+import br.com.carvalho.proxyadb.presentation.Dimens
 import org.jetbrains.compose.resources.painterResource
 import proxyadb.composeapp.generated.resources.Res
 import proxyadb.composeapp.generated.resources.app_icon
@@ -65,12 +64,7 @@ fun FrameWindowScope.CustomTitleBar(
                 false
             )
         } else {
-            window.background = AwtColor(
-                AppConstants.COLOR_RGB_BLACK,
-                AppConstants.COLOR_RGB_BLACK,
-                AppConstants.COLOR_RGB_BLACK,
-                AppConstants.COLOR_ALPHA_TRANSPARENT
-            )
+            window.background = AwtColor(0, 0, 0, 0)
         }
     }
 
@@ -80,11 +74,11 @@ fun FrameWindowScope.CustomTitleBar(
             .then(
                 if (!isMac) {
                     Modifier
-                        .clip(RoundedCornerShape(AppConstants.SIZE_CORNER_RADIUS_MEDIUM.dp))
+                        .clip(RoundedCornerShape(Dimens.CornerRadiusMedium))
                         .border(
-                            AppConstants.SIZE_BORDER_THICKNESS.dp,
+                            Dimens.SizeBorderThickness,
                             AppColors.surfaceBorder,
-                            RoundedCornerShape(AppConstants.SIZE_CORNER_RADIUS_MEDIUM.dp)
+                            RoundedCornerShape(Dimens.CornerRadiusMedium)
                         )
                 } else Modifier
             )
@@ -96,7 +90,7 @@ fun FrameWindowScope.CustomTitleBar(
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(AppConstants.SIZE_MAC_TOP_PADDING.dp)
+                            .height(Dimens.MacTopPadding)
                     )
                 }
             } else {
@@ -104,26 +98,26 @@ fun FrameWindowScope.CustomTitleBar(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(AppConstants.SIZE_TITLE_BAR_HEIGHT.dp)
+                            .height(Dimens.TitleBarHeight)
                             .background(AppColors.background)
-                            .padding(start = AppConstants.SPACING_MEDIUM.dp),
+                            .padding(start = Dimens.SpacingMedium),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(AppConstants.SPACING_SMALL.dp)
+                            horizontalArrangement = Arrangement.spacedBy(Dimens.SpacingSmall)
                         ) {
                             Icon(
                                 painter = painterResource(Res.drawable.app_icon),
                                 contentDescription = null,
-                                modifier = Modifier.size(AppConstants.SIZE_TITLE_BAR_ICON.dp),
+                                modifier = Modifier.size(Dimens.TitleBarIconSize),
                                 tint = Color.Unspecified
                             )
                             Text(
                                 text = Strings[StringKeys.WINDOW_TITLE],
                                 color = AppColors.textSecondary,
-                                fontSize = AppConstants.FONT_SIZE_SMALL.sp,
+                                fontSize = Dimens.FontSizeSmall,
                                 fontWeight = FontWeight.Medium
                             )
                         }
@@ -162,7 +156,7 @@ private fun TitleBarButton(
 
     Box(
         modifier = Modifier
-            .size(AppConstants.SIZE_TITLE_BAR_BUTTON.dp)
+            .size(Dimens.TitleBarButtonSize)
             .background(if (isHovered) hoverColor else Color.Transparent)
             .clickable(
                 interactionSource = interactionSource,
@@ -174,7 +168,7 @@ private fun TitleBarButton(
         Icon(
             imageVector = icon,
             contentDescription = null,
-            modifier = Modifier.size(AppConstants.TITLE_BAR_BUTTON_ICON_SIZE.dp),
+            modifier = Modifier.size(Dimens.TitleBarCloseIconSize),
             tint = if (isHovered) Color.White else AppColors.textSecondary
         )
     }

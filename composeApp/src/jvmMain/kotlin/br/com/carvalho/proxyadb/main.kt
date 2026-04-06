@@ -1,7 +1,6 @@
 package br.com.carvalho.proxyadb
 
 import androidx.compose.runtime.remember
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowState
 import androidx.compose.ui.window.application
@@ -9,6 +8,7 @@ import br.com.carvalho.proxyadb.core.AppConstants
 import br.com.carvalho.proxyadb.core.StringKeys
 import br.com.carvalho.proxyadb.core.Strings
 import br.com.carvalho.proxyadb.di.appModule
+import br.com.carvalho.proxyadb.presentation.Dimens
 import br.com.carvalho.proxyadb.presentation.ProxyScreen
 import br.com.carvalho.proxyadb.presentation.components.CustomTitleBar
 import org.jetbrains.compose.resources.painterResource
@@ -29,8 +29,8 @@ fun main() = application {
             title = Strings[StringKeys.WINDOW_TITLE],
             icon = icon,
             state = WindowState(
-                width = AppConstants.WINDOW_WIDTH_DP.dp,
-                height = AppConstants.WINDOW_HEIGHT_DP.dp,
+                width = Dimens.WindowWidth,
+                height = Dimens.WindowHeight,
             ),
             resizable = false,
             undecorated = !isMac,

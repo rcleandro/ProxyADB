@@ -22,41 +22,37 @@ class AdbRepositoryImpl : AdbRepository {
         .lowercase()
         .contains(AppConstants.OS_NAME_WINDOWS)
 
-    override suspend fun isAvailable(): Boolean = withContext(Dispatchers.IO) {
-        runCatching {
-            val process = execute(AppConstants.ADB_COMMAND_VERSION)
-            process.waitFor() == 0
-        }.getOrDefault(false)
+    override suspend fun isAvailable(): Boolean =
+        runCommand(AppConstants.ADB_COMMAND_VERSION).exitCode == 0
+
+    override suspend fun setProxy(config: ProxyConfig): AdbResult {
+        val command = "${AppConstants.ADB_COMMAND_PROXY} ${config.toAdbValue()}"
+        val result = runCommand(command)
+
+        return when {
+            result.exitCode == 0 ->
+                AdbResult.Success(result.output)
+
+            result.error.contains(AppConstants.ADB_ERROR_NO_DEVICES) ->
+                AdbResult.Failure(FailureReason.DeviceNotConnected, result.error)
+
+            result.error.contains(AppConstants.ADB_ERROR_NO_FILE) || result.exitCode == -1 ->
+                AdbResult.Failure(FailureReason.AdbNotFound, result.error)
+
+            else ->
+                AdbResult.Failure(FailureReason.CommandError(result.exitCode), result.error)
+        }
     }
 
-    override suspend fun setProxy(config: ProxyConfig): AdbResult = withContext(Dispatchers.IO) {
-        val command = "${AppConstants.ADB_COMMAND_PROXY} ${config.toAdbValue()}"
+    private suspend fun runCommand(command: String): CommandResult = withContext(Dispatchers.IO) {
         runCatching {
             val process = execute(command)
             val output = process.inputStream.bufferedReader().readText().trim()
             val error = process.errorStream.bufferedReader().readText().trim()
-            val code = process.waitFor()
-
-            when {
-                code == 0 ->
-                    AdbResult.Success(output)
-
-                error.contains(AppConstants.ADB_ERROR_NO_DEVICES) ->
-                    AdbResult.Failure(FailureReason.DeviceNotConnected, error)
-
-                else ->
-                    AdbResult.Failure(FailureReason.CommandError(code), error)
-            }
-        }.getOrElse { exception ->
-            val reason = if (
-                exception is java.io.IOException &&
-                exception.message?.contains(AppConstants.ADB_ERROR_NO_FILE) == true
-            ) {
-                FailureReason.AdbNotFound
-            } else {
-                FailureReason.UnexpectedException(exception.message.orEmpty())
-            }
-            AdbResult.Failure(reason)
+            val exitCode = process.waitFor()
+            CommandResult(exitCode, output, error)
+        }.getOrElse { 
+            CommandResult(-1, "", it.message ?: "") 
         }
     }
 
@@ -70,4 +66,10 @@ class AdbRepositoryImpl : AdbRepository {
             .redirectErrorStream(false)
             .start()
     }
+
+    private data class CommandResult(
+        val exitCode: Int,
+        val output: String,
+        val error: String
+    )
 }
