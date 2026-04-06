@@ -43,7 +43,7 @@ compose.desktop {
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "br.com.carvalho.proxyadb"
+            packageName = "ADB Proxy"
             packageVersion = "1.0.0"
         }
     }
