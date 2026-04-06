@@ -18,9 +18,9 @@ import kotlinx.coroutines.withContext
  */
 class AdbRepositoryImpl : AdbRepository {
 
-    private val isWindows = System.getProperty("os.name")
+    private val isWindows = System.getProperty(AppConstants.SYS_PROP_OS_NAME)
         .lowercase()
-        .contains("windows")
+        .contains(AppConstants.OS_NAME_WINDOWS)
 
     override suspend fun isAvailable(): Boolean = withContext(Dispatchers.IO) {
         runCatching {
@@ -33,15 +33,17 @@ class AdbRepositoryImpl : AdbRepository {
         val command = "${AppConstants.ADB_COMMAND_PROXY} ${config.toAdbValue()}"
         runCatching {
             val process = execute(command)
-            val output  = process.inputStream.bufferedReader().readText().trim()
-            val error   = process.errorStream.bufferedReader().readText().trim()
-            val code    = process.waitFor()
+            val output = process.inputStream.bufferedReader().readText().trim()
+            val error = process.errorStream.bufferedReader().readText().trim()
+            val code = process.waitFor()
 
             when {
                 code == 0 ->
                     AdbResult.Success(output)
+
                 error.contains(AppConstants.ADB_ERROR_NO_DEVICES) ->
                     AdbResult.Failure(FailureReason.DeviceNotConnected, error)
+
                 else ->
                     AdbResult.Failure(FailureReason.CommandError(code), error)
             }

@@ -73,8 +73,10 @@ private fun ProxyScreenContent(
     onPortChange: (String) -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
-    val os = remember { System.getProperty("os.name").lowercase() }
-    val topPadding = if (os.contains("mac")) AppConstants.SIZE_MAC_TOP_PADDING.dp else AppConstants.SPACING_ZERO.dp
+    val os = remember { System.getProperty(AppConstants.SYS_PROP_OS_NAME).lowercase() }
+    val topPadding =
+        if (os.contains(AppConstants.OS_NAME_MAC)) AppConstants.SIZE_MAC_TOP_PADDING.dp
+        else AppConstants.SPACING_ZERO.dp
 
     LazyColumn(
         modifier = Modifier
