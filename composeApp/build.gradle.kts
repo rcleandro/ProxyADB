@@ -45,6 +45,20 @@ compose.desktop {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "ADB Proxy"
             packageVersion = "1.0.0"
+
+            val iconsDir = project.file("src/jvmMain/resources/drawables")
+            macOS {
+                iconFile.set(iconsDir.resolve("app_icon.icns"))
+                bundleID = "br.com.carvalho.proxyadb"
+            }
+            windows {
+                iconFile.set(iconsDir.resolve("app_icon.ico"))
+                menu = true
+                shortcut = true
+            }
+            linux {
+                iconFile.set(iconsDir.resolve("app_icon.png"))
+            }
         }
     }
 }

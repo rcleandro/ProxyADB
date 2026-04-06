@@ -22,8 +22,8 @@ fun main() = application {
     }) {
         val os = remember { System.getProperty(AppConstants.SYS_PROP_OS_NAME).lowercase() }
         val isMac = os.contains(AppConstants.OS_NAME_MAC)
-        
         val icon = painterResource(Res.drawable.app_icon)
+
         Window(
             onCloseRequest = ::exitApplication,
             title = Strings[StringKeys.WINDOW_TITLE],
