@@ -9,15 +9,20 @@ import br.com.carvalho.proxyadb.core.StringKeys
 import br.com.carvalho.proxyadb.core.Strings
 import br.com.carvalho.proxyadb.di.appModule
 import br.com.carvalho.proxyadb.presentation.ProxyScreen
+import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.KoinApplication
+import proxyadb.composeapp.generated.resources.Res
+import proxyadb.composeapp.generated.resources.app_icon
 
 fun main() = application {
     KoinApplication(application = {
         modules(appModule)
     }) {
+        val icon = painterResource(Res.drawable.app_icon)
         Window(
             onCloseRequest = ::exitApplication,
             title = Strings[StringKeys.WINDOW_TITLE],
+            icon = icon,
             state = WindowState(
                 width = AppConstants.WINDOW_WIDTH_DP.dp,
                 height = AppConstants.WINDOW_HEIGHT_DP.dp,
