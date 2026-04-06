@@ -47,7 +47,7 @@ fun WindowScope.CustomTitleBar(
                 .fillMaxWidth()
                 .height(AppConstants.SIZE_TITLE_BAR_HEIGHT.dp)
                 .background(AppColors.background)
-                .padding(horizontal = AppConstants.SPACING_MEDIUM.dp),
+                .padding(start = AppConstants.SPACING_MEDIUM.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
