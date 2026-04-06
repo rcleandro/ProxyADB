@@ -78,7 +78,7 @@ fun WindowScope.CustomTitleBar(
                 TitleBarButton(
                     onClick = onClose,
                     icon = Icons.Default.Close,
-                    hoverColor = AppColors.error
+                    hoverColor = AppColors.close
                 )
             }
         }

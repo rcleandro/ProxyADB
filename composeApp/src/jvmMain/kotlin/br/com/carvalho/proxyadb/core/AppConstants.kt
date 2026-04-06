@@ -64,7 +64,7 @@ object AppConstants {
     const val SIZE_BORDER_THICKNESS = 1.0
     const val SIZE_BORDER_THICK_THICKNESS = 2.0
     const val SIZE_CORNER_RADIUS_SMALL = 12
-    const val SIZE_CORNER_RADIUS_MEDIUM = 16
+    const val SIZE_CORNER_RADIUS_MEDIUM = 8
     const val SIZE_CORNER_RADIUS_LARGE = 20
     const val SIZE_MAC_TOP_PADDING = 24
     const val SIZE_TITLE_BAR_HEIGHT = 40

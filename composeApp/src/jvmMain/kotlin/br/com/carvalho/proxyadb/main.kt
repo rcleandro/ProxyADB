@@ -45,20 +45,29 @@ fun main() = application {
             ),
             resizable = false,
             undecorated = !isMac,
-            transparent = true,
+            transparent = !isMac,
         ) {
             SideEffect {
-                window.background = AwtColor(
-                    AppConstants.COLOR_RGB_BLACK,
-                    AppConstants.COLOR_RGB_BLACK,
-                    AppConstants.COLOR_RGB_BLACK,
-                    AppConstants.COLOR_ALPHA_TRANSPARENT
-                )
-                
                 if (isMac) {
-                    window.rootPane.putClientProperty(AppConstants.MAC_PROP_FULL_WINDOW_CONTENT, true)
-                    window.rootPane.putClientProperty(AppConstants.MAC_PROP_TRANSPARENT_TITLE_BAR, true)
-                    window.rootPane.putClientProperty(AppConstants.MAC_PROP_WINDOW_TITLE_VISIBLE, false)
+                    window.rootPane.putClientProperty(
+                        AppConstants.MAC_PROP_FULL_WINDOW_CONTENT,
+                        true
+                    )
+                    window.rootPane.putClientProperty(
+                        AppConstants.MAC_PROP_TRANSPARENT_TITLE_BAR,
+                        true
+                    )
+                    window.rootPane.putClientProperty(
+                        AppConstants.MAC_PROP_WINDOW_TITLE_VISIBLE,
+                        false
+                    )
+                } else {
+                    window.background = AwtColor(
+                        AppConstants.COLOR_RGB_BLACK,
+                        AppConstants.COLOR_RGB_BLACK,
+                        AppConstants.COLOR_RGB_BLACK,
+                        AppConstants.COLOR_ALPHA_TRANSPARENT
+                    )
                 }
             }
 

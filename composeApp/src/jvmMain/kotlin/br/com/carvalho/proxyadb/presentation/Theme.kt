@@ -15,6 +15,7 @@ object AppColors {
     val mono = Color(0xFF6EE7B7)
     val success = Color(0xFF3DDB84)
     val successDim = Color(0xFF1A6640)
+    val close = Color(0xFFFF0000)
     val error = Color(0xFFE05C5C)
 }
 
