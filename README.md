@@ -12,19 +12,22 @@ O objetivo principal é automatizar o processo de habilitar e desabilitar o prox
 - **Status do ADB**: Monitoramento em tempo real da disponibilidade do ADB no sistema.
 - **Preview de Comando**: Visualize o comando `adb shell` exato que será executado.
 - **Suporte Multi-idioma**: Disponível em Português, Inglês e Espanhol.
-- **Interface Dark Mode**: Design moderno inspirado em ferramentas de desenvolvedor.
+- **Interface Dark Mode**: Design moderno com barra de título customizada (Windows/Linux).
 
 ## 🛠️ Tecnologias Utilizadas
 
 - **Kotlin Multiplatform**: Estrutura do projeto.
-- **Compose Multiplatform**: Interface de usuário (Desktop JVM).
+- **Compose Multiplatform**: Interface de usuário para Desktop (JVM).
 - **Koin**: Injeção de dependência.
 - **Kotlinx Coroutines**: Operações assíncronas para execução de comandos ADB.
-- **ViewModel (Lifecycle)**: Gerenciamento de estado da UI.
+- **Jetpack Lifecycle (ViewModel)**: Gerenciamento de estado da UI.
+- **Compose Resources**: Gestão de strings multi-idioma e assets.
 
 ## 🚀 Como Executar
 
-Certifique-se de ter o [ADB](https://developer.android.com/studio/releases/platform-tools) instalado e configurado no seu `PATH`.
+### Pré-requisitos
+
+Certifique-se de ter o [ADB (Android Debug Bridge)](https://developer.android.com/studio/releases/platform-tools) instalado e configurado nas variáveis de ambiente (`PATH`) do seu sistema.
 
 ### Execução via Terminal
 
@@ -37,20 +40,20 @@ Certifique-se de ter o [ADB](https://developer.android.com/studio/releases/platf
   ./gradlew :composeApp:run
   ```
 - **Windows**:
-  ```shell
+  ```powershell
   .\gradlew.bat :composeApp:run
   ```
 
 ## 📦 Distribuição
 
-Para gerar os pacotes de instalação nativos (`.dmg`, `.msi`, `.deb`):
+Para gerar os pacotes de instalação nativos (`.dmg`, `.msi`, `.deb`) para o sistema operacional atual:
 
 ```shell
-./gradlew :composeApp:package
+./gradlew :composeApp:packageDistributionForCurrentOS
 ```
 
 Os arquivos gerados estarão disponíveis em `composeApp/build/compose/binaries`.
 
 ---
 
-Desenvolvido por Leandro Carvalho.
+Desenvolvido por [Leandro Carvalho](https://github.com/rcleandro).
