@@ -12,6 +12,7 @@ import br.com.carvalho.proxyadb.domain.EnableProxyUseCase
 import br.com.carvalho.proxyadb.domain.FailureReason
 import br.com.carvalho.proxyadb.domain.GetLocalIpUseCase
 import br.com.carvalho.proxyadb.domain.ProxyConfig
+import br.com.carvalho.proxyadb.domain.SettingsRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -23,8 +24,8 @@ import kotlinx.coroutines.launch
  * Compose re-composes only the parts that changed.
  */
 data class ProxyUiState(
-    val localIp: String? = null,
-    val port: String = AppConstants.PROXY_DEFAULT_PORT.toString(),
+    val localIp: String = "",
+    val port: String = "",
     val proxyEnabled: Boolean = false,
     val adbStatus: AdbStatus = AdbStatus.Checking,
     val toggleLoading: Boolean = false,
@@ -55,6 +56,7 @@ class ProxyViewModel(
     private val disableProxy: DisableProxyUseCase,
     private val checkAdb: CheckAdbAvailabilityUseCase,
     private val getLocalIp: GetLocalIpUseCase,
+    private val settingsRepository: SettingsRepository,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(ProxyUiState())
     val uiState: StateFlow<ProxyUiState> = _uiState.asStateFlow()
@@ -73,10 +75,13 @@ class ProxyViewModel(
             val result = if (state.proxyEnabled) {
                 disableProxy()
             } else {
-                val ip =
-                    state.localIp ?: return@launch emitError(Strings[StringKeys.ERR_IP_MISSING])
-                val port = state.port.toIntOrNull() ?: AppConstants.PROXY_DEFAULT_PORT
-                enableProxy(ProxyConfig(host = ip, port = port))
+                val ip = state.localIp.takeIf { it.isNotBlank() }
+                    ?: return@launch emitError(Strings[StringKeys.ERR_IP_MISSING])
+                val portInt = state.port.toIntOrNull() ?: AppConstants.PROXY_DEFAULT_PORT
+
+                settingsRepository.saveLastPort(portInt)
+
+                enableProxy(ProxyConfig(host = ip, port = portInt))
             }
 
             _uiState.update { current ->
@@ -99,6 +104,10 @@ class ProxyViewModel(
         }
     }
 
+    fun onIpChange(newIp: String) {
+        _uiState.update { it.copy(localIp = newIp) }
+    }
+
     fun onPortChange(newPort: String) {
         if (newPort.all { it.isDigit() } && newPort.length <= AppConstants.PROXY_PORT_MAX_CHARS) {
             _uiState.update { it.copy(port = newPort) }
@@ -109,10 +118,12 @@ class ProxyViewModel(
         viewModelScope.launch {
             val ip = getLocalIp()
             val available = checkAdb()
+            val lastPort = settingsRepository.getLastPort()
 
             _uiState.update {
                 it.copy(
-                    localIp = ip,
+                    localIp = ip ?: "",
+                    port = lastPort.toString(),
                     adbStatus = if (available) AdbStatus.Available else AdbStatus.Unavailable,
                     userMessage = when {
                         !available -> UserMessage.Error(Strings[StringKeys.MSG_ADB_NOT_FOUND])

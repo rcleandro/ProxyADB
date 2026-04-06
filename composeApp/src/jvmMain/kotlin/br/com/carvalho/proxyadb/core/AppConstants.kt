@@ -6,7 +6,7 @@ package br.com.carvalho.proxyadb.core
  */
 object AppConstants {
     const val WINDOW_WIDTH_DP = 400
-    const val WINDOW_HEIGHT_DP = 620
+    const val WINDOW_HEIGHT_DP = 680
     const val ADB_COMMAND_VERSION = "adb version"
     const val ADB_COMMAND_PROXY = "adb shell settings put global http_proxy"
     const val ADB_SHELL_WINDOWS = "cmd.exe"

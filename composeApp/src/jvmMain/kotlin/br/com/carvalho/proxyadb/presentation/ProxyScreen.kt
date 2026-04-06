@@ -36,6 +36,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -57,6 +59,7 @@ fun ProxyScreen(
         ProxyScreenContent(
             state = state,
             onToggle = viewModel::onToggleProxy,
+            onIpChange = viewModel::onIpChange,
             onPortChange = viewModel::onPortChange,
         )
     }
@@ -66,18 +69,25 @@ fun ProxyScreen(
 private fun ProxyScreenContent(
     state: ProxyUiState,
     onToggle: () -> Unit,
+    onIpChange: (String) -> Unit,
     onPortChange: (String) -> Unit,
 ) {
+    val focusManager = LocalFocusManager.current
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(AppColors.background),
+            .background(AppColors.background)
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = { focusManager.clearFocus() }
+            ),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(AppConstants.SPACING_LARGE.dp),
         contentPadding = PaddingValues(AppConstants.PADDING_SCREEN.dp),
     ) {
         item { AppTitle() }
-        item { InfoCard(state = state, onPortChange = onPortChange) }
+        item { InfoCard(state = state, onIpChange = onIpChange, onPortChange = onPortChange) }
         item { ToggleSection(state = state, onToggle = onToggle) }
         item { CommandPreview(state = state) }
         item { StatusMessage(message = state.userMessage) }
@@ -104,7 +114,11 @@ private fun AppTitle() {
 }
 
 @Composable
-private fun InfoCard(state: ProxyUiState, onPortChange: (String) -> Unit) {
+private fun InfoCard(
+    state: ProxyUiState,
+    onIpChange: (String) -> Unit,
+    onPortChange: (String) -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -120,12 +134,19 @@ private fun InfoCard(state: ProxyUiState, onPortChange: (String) -> Unit) {
         verticalArrangement = Arrangement.spacedBy(AppConstants.SPACING_ZERO.dp),
     ) {
         InfoRow(label = Strings[StringKeys.LABEL_DETECTED_IP]) {
-            Text(
-                text = state.localIp ?: Strings[StringKeys.IP_NOT_DETECTED],
-                fontSize = AppConstants.FONT_SIZE_MEDIUM.sp,
-                fontFamily = FontFamily.Monospace,
-                fontWeight = FontWeight.Medium,
-                color = if (state.localIp != null) AppColors.mono else AppColors.error,
+            BasicTextField(
+                value = state.localIp,
+                onValueChange = onIpChange,
+                singleLine = true,
+                cursorBrush = SolidColor(AppColors.mono),
+                textStyle = TextStyle(
+                    fontSize = AppConstants.FONT_SIZE_MEDIUM.sp,
+                    fontFamily = FontFamily.Monospace,
+                    fontWeight = FontWeight.Medium,
+                    color = if (state.localIp.isNotBlank()) AppColors.mono else AppColors.error,
+                    textAlign = androidx.compose.ui.text.style.TextAlign.End
+                ),
+                modifier = Modifier.width(150.dp),
             )
         }
         HorizontalDivider()
@@ -134,11 +155,13 @@ private fun InfoCard(state: ProxyUiState, onPortChange: (String) -> Unit) {
                 value = state.port,
                 onValueChange = onPortChange,
                 singleLine = true,
+                cursorBrush = SolidColor(AppColors.mono),
                 textStyle = TextStyle(
                     fontSize = AppConstants.FONT_SIZE_MEDIUM.sp,
                     fontFamily = FontFamily.Monospace,
                     fontWeight = FontWeight.Medium,
                     color = AppColors.mono,
+                    textAlign = androidx.compose.ui.text.style.TextAlign.End
                 ),
                 modifier = Modifier.width(AppConstants.SIZE_PORT_WIDTH.dp),
             )
@@ -147,7 +170,7 @@ private fun InfoCard(state: ProxyUiState, onPortChange: (String) -> Unit) {
         InfoRow(label = Strings[StringKeys.LABEL_ADB_PATH]) {
             val (label, color) = when (state.adbStatus) {
                 AdbStatus.Checking -> Strings[StringKeys.ADB_STATUS_CHECKING] to AppColors.textSecondary
-                AdbStatus.Available -> Strings[StringKeys.ADB_STATUS_AVAILABLE] to AppColors.success
+                AdbStatus.Available -> Strings[StringKeys.ADB_STATUS_AVAILABLE] to AppColors.mono
                 AdbStatus.Unavailable -> Strings[StringKeys.ADB_STATUS_UNAVAILABLE] to AppColors.error
             }
             Text(
@@ -192,9 +215,7 @@ private fun HorizontalDivider() {
 
 @Composable
 private fun ToggleSection(state: ProxyUiState, onToggle: () -> Unit) {
-    val canToggle = state.adbStatus == AdbStatus.Available &&
-            state.localIp != null &&
-            !state.toggleLoading
+    val canToggle = state.adbStatus == AdbStatus.Available && !state.toggleLoading
 
     val accentColor by animateColorAsState(
         targetValue = if (state.proxyEnabled) AppColors.success else AppColors.error,
@@ -259,7 +280,7 @@ private fun CommandPreview(state: ProxyUiState) {
     val nextCommand = if (state.proxyEnabled) {
         "${AppConstants.ADB_COMMAND_PROXY} ${AppConstants.PROXY_DISABLED_VALUE}"
     } else {
-        val ip = state.localIp ?: "<IP>"
+        val ip = state.localIp.ifBlank { "<IP>" }
         val port = state.port.ifEmpty { AppConstants.PROXY_DEFAULT_PORT.toString() }
         "${AppConstants.ADB_COMMAND_PROXY} $ip:$port"
     }
